@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper flex-1" ref="wrapper" @dblclick="boxReset">
     <div class="box" ref="box">
-      <img :src="url" ref="img" @load="() => $emit('loadedImage')">
+      <img :src="url" ref="img" @load="loadImage()">
     </div>
   </div>
 </template>
@@ -45,7 +45,7 @@ export default {
     }
   },
   methods: {
-    loadedImage() {
+    firstLoadedImage() {
       this.img.realWidth = this.img.width = this.$refs.img.width
       this.img.realHeight = this.img.height = this.$refs.img.height
       this.img.whRate = this.img.width / this.img.height
@@ -117,12 +117,20 @@ export default {
         }
       })
     },
+    loadImage() {
+      this.$emit('loadedImage')
+    },
     reloadImage() {
-      this.url = this.baseUrl + '?' + Date.now()
+      let url = this.baseUrl + '?' + Date.now()
+      let img = new Image()
+      img.src = url
+      img.addEventListener('load', () => {
+        this.url = url
+      })
     },
   },
   mounted() {
-    this.$once('loadedImage', this.loadedImage.bind(this))
+    this.$once('loadedImage', this.firstLoadedImage.bind(this))
     if (this.$refs.img.complete) {
       this.$emit('loadedImage')
     }
