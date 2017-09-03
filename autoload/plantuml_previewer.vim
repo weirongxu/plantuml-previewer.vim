@@ -33,11 +33,5 @@ function! plantuml_previewer#refresh() "{{{
   let content = getline(1,'$')
   call writefile(content, s:tmp_puml_path)
   let cmd = ['java', '-Dapple.awt.UIElement=true', '-jar', s:jar_path, s:tmp_puml_path , '-tpng']
-  " let cmd = 'java -Dapple.awt.UIElement=true -jar ' . s:jar_path . ' ' . s:tmp_puml_path . ' -tpng'
-  " if exists('*jobstart')
-  "   call jobstart(cmd)
-  " else
-  "   call system(cmd)
-  " endif
-    call s:P.execute(cmd, {"background": 1})
+  call s:P.execute(cmd, {"background": 1})
 endfunction "}}}
