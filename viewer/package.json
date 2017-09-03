@@ -1,0 +1,23 @@
+{
+  "name": "viewer",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "dependencies": {
+    "draggabilly": "^2.1.1",
+    "vue": "^2.4.2",
+    "wheel": "0.0.5"
+  },
+  "devDependencies": {
+    "node-sass": "^4.5.3",
+    "sass-loader": "^6.0.6",
+    "file-loader": "^0.11.2",
+    "poi": "^9.3.4"
+  },
+  "scripts": {
+    "dev": "poi src/index.js",
+    "build": "poi build src/index.js -o dist"
+  },
+  "author": "Weirong Xu <weirongxu.raidou@gmail.com>",
+  "license": "MIT"
+}

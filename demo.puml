@@ -1,0 +1,12 @@
+@startuml
+
+class users {
+  name
+  password_hash
+  phone
+  email
+  remark
+  last_logined_at
+}
+
+@enduml
