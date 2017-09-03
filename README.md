@@ -11,7 +11,7 @@ Vim plugin for preview [Plantuml](http://plantuml.com/)
 ## Usage
 1. Start editing plantuml file
 2. Run `:PlantumlOpen` open browser to previewer
-3. Update plantuml file, and viewer will refresh
+3. Update plantuml file, and previewer will refresh
 
 ## Related
 * [vim-slumlord](https://github.com/scrooloose/vim-slumlord)
