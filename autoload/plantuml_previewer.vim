@@ -15,6 +15,7 @@ function! plantuml_previewer#start() "{{{
     echoerr 'require openbrowser'
     return
   endif
+  call delete(s:tmp_puml_path)
   call plantuml_previewer#refresh()
   augroup plantuml_previewer
     autocmd!
