@@ -4,7 +4,7 @@ let s:base_path = expand("<sfile>:p:h") . '/..'
 let s:jar_path = s:base_path . '/lib/plantuml.jar'
 let s:viewer_base_path = s:base_path . '/viewer'
 let s:tmp_puml_path = s:viewer_base_path . '/tmp.puml'
-let s:tmp_png_path = s:viewer_base_path . '/tmp.png'
+let s:tmp_svg_path = s:viewer_base_path . '/tmp.svg'
 let s:viewer_html_path = s:viewer_base_path . '/dist/index.html'
 
 function! plantuml_previewer#start() "{{{
@@ -34,7 +34,7 @@ endfunction "}}}
 function! plantuml_previewer#refresh() "{{{
   let content = getline(1,'$')
   call writefile(content, s:tmp_puml_path)
-  let cmd = ['java', '-Dapple.awt.UIElement=true', '-jar', s:jar_path, s:tmp_puml_path , '-tpng']
+  let cmd = ['java', '-Dapple.awt.UIElement=true', '-jar', s:jar_path, s:tmp_puml_path , '-tsvg']
   try
     call s:P.execute(cmd, {
         \ 'background': 1,
