@@ -16,7 +16,7 @@
   },
   "scripts": {
     "dev": "poi src/index.js",
-    "build": "poi build src/index.js -o dist"
+    "build": "poi build src/index.js -d dist"
   },
   "author": "Weirong Xu <weirongxu.raidou@gmail.com>",
   "license": "MIT"

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper flex-1" ref="wrapper" @dblclick="boxReset">
+  <div class="wrapper" ref="wrapper" @dblclick="boxReset">
     <div class="box" ref="box">
       <img :src="url" ref="img" @load="loadImage()">
     </div>
