@@ -2,3 +2,5 @@ plantuml_previewer
 1dc9e9c9715e1e4e67bc3ea61c6b8f4501017053
 
 System.Process
+System.Job
+System.Process.Job

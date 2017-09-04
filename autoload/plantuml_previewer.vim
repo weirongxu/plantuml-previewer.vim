@@ -1,4 +1,5 @@
 let s:P = vital#plantuml_previewer#new().import('System.Process')
+call s:P.register('System.Process.Job')
 let s:base_path = expand("<sfile>:p:h") . '/..'
 let s:jar_path = s:base_path . '/lib/plantuml.jar'
 let s:viewer_base_path = s:base_path . '/viewer'
@@ -34,5 +35,16 @@ function! plantuml_previewer#refresh() "{{{
   let content = getline(1,'$')
   call writefile(content, s:tmp_puml_path)
   let cmd = ['java', '-Dapple.awt.UIElement=true', '-jar', s:jar_path, s:tmp_puml_path , '-tpng']
-  call s:P.execute(cmd, {"background": 1})
+  try
+    call s:P.execute(cmd, {
+        \ 'background': 1,
+        \ 'clients': [
+        \   'System.Process.Job',
+        \   'System.Process.Vimproc',
+        \   'System.Process.System',
+        \ ],
+        \})
+  catch /.*/
+    call s:P.execute(cmd)
+  endtry
 endfunction "}}}
