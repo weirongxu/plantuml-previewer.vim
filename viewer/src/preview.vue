@@ -23,6 +23,7 @@
 }
 .box {
   position: absolute;
+  cursor: move;
 }
 </style>
 
