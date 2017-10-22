@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     boxReset() {
-      let $wrapper = this.$refs.wrapper
+      const $wrapper = this.$refs.wrapper
       if ($wrapper.clientWidth / $wrapper.clientHeight > this.img.whRate) {
         this.boxResize({height: $wrapper.clientHeight})
       } else {
@@ -62,8 +62,8 @@ export default {
       this.boxCenter()
     },
     boxResize({width = null, height = null} = {}) {
-      let $box = this.$refs.box
-      let $img = this.$refs.img
+      const $box = this.$refs.box
+      const $img = this.$refs.img
       if (width) {
         this.img.width = width
         this.img.height = width / this.img.whRate
@@ -87,17 +87,17 @@ export default {
       if (left > 1) {
         left = 1
       }
-      let $wrapper = this.$refs.wrapper
-      let $box = this.$refs.box
+      const $wrapper = this.$refs.wrapper
+      const $box = this.$refs.box
       this.center.left = left
       this.center.top = top
       $box.style.top = ($wrapper.clientHeight/2 - top*this.img.height) + 'px'
       $box.style.left = ($wrapper.clientWidth/2 - left*this.img.width) + 'px'
     },
     bindEvent() {
-      let $wrapper = this.$refs.wrapper
-      let $box = this.$refs.box
-      var dragger = new Dragger($box)
+      const $wrapper = this.$refs.wrapper
+      const $box = this.$refs.box
+      const dragger = new Dragger($box)
       dragger.on('dragEnd', event => {
         let {top, left} = $box.style
         top = parseFloat(top)
@@ -108,24 +108,22 @@ export default {
       addWheelListener($wrapper, e => {
         e.preventDefault()
         let {top, left} = this.center
-        if (e.wheelDelta > 0) {
-          this.boxResize({width: this.img.width * 1.1})
-          this.boxCenter({top, left})
-        } else {
-          this.boxResize({width: this.img.width * 0.9})
+        const width = this.img.width + e.deltaY * 10
+        if (width > 100) {
+          this.boxResize({width})
           this.boxCenter({top, left})
         }
       })
     },
     reloadImage() {
-      let url = this.baseUrl + '?' + Date.now()
-      let img = new Image()
+      const url = this.baseUrl + '?' + Date.now()
+      const img = new Image()
       img.src = url
       img.addEventListener('load', () => {
         this.url = url
         this.img.realWidth = img.width
         this.img.realHeight = img.height
-        let whRate = img.width / img.height
+        const whRate = img.width / img.height
         if (this.img.whRate !== whRate) {
           this.$refs.img.height = this.$refs.img.width / whRate
           this.img.whRate = whRate
@@ -134,7 +132,11 @@ export default {
     },
   },
   mounted() {
-    this.$once('loadedImage', this.boxReset.bind(this))
+    this.$once('loadedImage', () => {
+      setTimeout(() => {
+        this.boxReset()
+      }, 300)
+    })
     if (this.$refs.img.complete) {
       this.$emit('loadedImage')
     }
