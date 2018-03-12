@@ -5,6 +5,9 @@ Vim plugin for preview [Plantuml](http://plantuml.com/)
 
 ## Dependencies
 * Java
+* Graphviz (https://www.graphviz.org/download/)
+  * brew install graphviz
+  * apt-get install graphviz
 * [open-browser.vim](https://github.com/tyru/open-browser.vim)
 * [aklt/plantuml-syntax](https://github.com/aklt/plantuml-syntax) (vim syntax file for plantuml)
 
