@@ -4,15 +4,15 @@
   "description": "",
   "private": true,
   "dependencies": {
-    "draggabilly": "^2.1.1",
-    "vue": "^2.4.2",
+    "draggabilly": "^2.2.0",
+    "vue": "^2.5.16",
     "wheel": "0.0.5"
   },
   "devDependencies": {
-    "node-sass": "^4.5.3",
-    "sass-loader": "^6.0.6",
-    "file-loader": "^0.11.2",
-    "poi": "^9.3.4"
+    "file-loader": "^1.1.11",
+    "node-sass": "^4.9.0",
+    "poi": "^10.1.6",
+    "sass-loader": "^7.0.1"
   },
   "scripts": {
     "dev": "poi --port 3233 src/index.js",
