@@ -55,6 +55,7 @@ export default {
         left: null,
         top: null,
       },
+      needReset: true,
       diagramUrl,
       url: null,
     }
@@ -120,6 +121,9 @@ export default {
         }
       })
 
+      $tmpImage.addEventListener('error', () => {
+        this.needReset = true
+      })
       $tmpImage.addEventListener('load', () => {
         this.url = $tmpImage.src
         this.img.realWidth = $tmpImage.width
@@ -129,7 +133,10 @@ export default {
           this.img.height = this.img.width / whRate
           this.img.whRate = whRate
         }
-        $tmpImage.src = null
+        if (this.needReset) {
+          this.needReset = false
+          this.boxReset()
+        }
       })
     },
     reloadImage() {
@@ -137,9 +144,6 @@ export default {
     },
   },
   mounted() {
-    setTimeout(() => {
-      this.boxReset.call(this)
-    }, 300)
     this.bindEvent()
     this.reloadImage()
     setInterval(() => {
