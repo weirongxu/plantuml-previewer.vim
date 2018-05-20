@@ -1,8 +1,8 @@
 module.exports = {
-  production: {
-    webpack(config) {
+  configuareWebpack(config, context) {
+    if (context.command === 'build') {
       config.output.publicPath = './'
-      return config
     }
+    return config
   }
 }

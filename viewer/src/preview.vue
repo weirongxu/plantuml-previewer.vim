@@ -1,9 +1,12 @@
 <template>
   <div class="wrapper" ref="wrapper" @dblclick="boxReset">
-    <div class="box" ref="box">
+    <div
+      class="box"
+      :style="{width: img.width + 'px', height: img.height + 'px'}"
+      :data-center="`left: ${center.left}, top: ${center.top}`"
+      ref="box">
       <img
         v-show="url"
-        :style="{width: img.width, height: img.height}"
         :src="url"
         ref="img"
         @load="() => $emit('loadedImage')">
@@ -23,17 +26,22 @@
 }
 .box {
   position: absolute;
+  img {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>
 
 <script>
 import {addWheelListener, removeWheelListener} from 'wheel'
-import url from '!file-loader!./tmp.svg'
 import Dragger from 'draggabilly'
+// import url from '!file-loader!./tmp.svg'
 
 export default {
   data() {
-    const baseUrl = process.env.NODE_ENV === 'production' ? '../tmp.svg' : url
+    // const diagramUrl = process.env.NODE_ENV === 'production' ? '../tmp.svg' : url
+    const diagramUrl = '../tmp.svg'
     return {
       img: {
         realWidth: null,
@@ -46,7 +54,7 @@ export default {
         left: null,
         top: null,
       },
-      baseUrl,
+      diagramUrl,
       url: null,
     }
   },
@@ -62,7 +70,6 @@ export default {
     },
     boxResize({width = null, height = null} = {}) {
       let $box = this.$refs.box
-      let $img = this.$refs.img
       if (width) {
         this.img.width = width
         this.img.height = width / this.img.whRate
@@ -70,8 +77,6 @@ export default {
         this.img.height = height
         this.img.width = height * this.img.whRate
       }
-      $img.width = $box.width = this.img.width
-      $img.height = $box.height = this.img.height
     },
     boxCenter({top = 0.5, left = 0.5} = {}) {
       if (top < 0) {
@@ -90,8 +95,10 @@ export default {
       let $box = this.$refs.box
       this.center.left = left
       this.center.top = top
-      $box.style.top = ($wrapper.clientHeight/2 - top*this.img.height) + 'px'
-      $box.style.left = ($wrapper.clientWidth/2 - left*this.img.width) + 'px'
+      $box.style.top = (top * $wrapper.clientHeight - this.img.height / 2) + 'px'
+      $box.style.left = (left * $wrapper.clientWidth - this.img.width / 2) + 'px'
+      // $box.style.top = ($wrapper.clientHeight/2 - top*this.img.height) + 'px'
+      // $box.style.left = ($wrapper.clientWidth/2 - left*this.img.width) + 'px'
     },
     bindEvent() {
       let $wrapper = this.$refs.wrapper
@@ -101,8 +108,10 @@ export default {
         let {top, left} = $box.style
         top = parseFloat(top)
         left = parseFloat(left)
-        this.center.top = ($wrapper.clientHeight/2 - top)/this.img.height
-        this.center.left = ($wrapper.clientWidth/2 - left)/this.img.width
+        this.center.left = (this.img.width / 2 + left) / $wrapper.clientWidth
+        this.center.top = (this.img.height / 2 + top) / $wrapper.clientHeight
+        // this.center.top = ($wrapper.clientHeight/2 - top)/this.img.height
+        // this.center.left = ($wrapper.clientWidth/2 - left)/this.img.width
       })
       addWheelListener($wrapper, e => {
         e.preventDefault()
@@ -117,23 +126,27 @@ export default {
       })
     },
     reloadImage() {
-      let url = this.baseUrl + '?' + Date.now()
-      let img = new Image()
-      img.src = url
-      img.addEventListener('load', () => {
+      let url = this.diagramUrl + '?' + Date.now()
+      let $img = new Image()
+      $img.src = url
+      $img.addEventListener('load', () => {
         this.url = url
-        this.img.realWidth = img.width
-        this.img.realHeight = img.height
-        let whRate = img.width / img.height
+        this.img.realWidth = $img.width
+        this.img.realHeight = $img.height
+        let whRate = $img.width / $img.height
         if (this.img.whRate !== whRate) {
-          this.$refs.img.height = this.$refs.img.width / whRate
+          this.img.height = this.img.width / whRate
           this.img.whRate = whRate
         }
       })
     },
   },
   mounted() {
-    this.$once('loadedImage', this.boxReset.bind(this))
+    this.$once('loadedImage', () => {
+      setTimeout(() => {
+        this.boxReset.call(this)
+      }, 500)
+    })
     if (this.$refs.img.complete) {
       this.$emit('loadedImage')
     }
