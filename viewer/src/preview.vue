@@ -144,7 +144,7 @@ export default {
     this.reloadImage()
     setInterval(() => {
       this.reloadImage()
-    }, 2000)
+    }, 1000)
   },
 }
 </script>
