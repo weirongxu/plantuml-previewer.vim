@@ -15,7 +15,7 @@
     "sass-loader": "^7.0.1"
   },
   "scripts": {
-    "start": "poi src/index.js",
+    "start": "poi --port 3233 src/index.js",
     "build": "poi build src/index.js -d dist"
   },
   "author": "Weirong Xu <weirongxu.raidou@gmail.com>",

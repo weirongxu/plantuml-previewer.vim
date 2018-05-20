@@ -5,13 +5,16 @@ Vim plugin for preview [Plantuml](http://plantuml.com/)
 
 ## Dependencies
 * Java
+* Graphviz (https://www.graphviz.org/download/)
+  * brew install graphviz
+  * apt-get install graphviz
 * [open-browser.vim](https://github.com/tyru/open-browser.vim)
 * [aklt/plantuml-syntax](https://github.com/aklt/plantuml-syntax) (vim syntax file for plantuml)
 
 ## Usage
-1. Start editing plantuml file
-2. Run `:PlantumlOpen` open browser to previewer
-3. Update plantuml file, and previewer will refresh
+1. Start editing plantuml file in Vim
+2. Run `:PlantumlOpen` to open previewer webpage in browser
+3. Saving plantuml file in Vim, then previewer webpage will refresh
 
 ## Related
 * [vim-slumlord](https://github.com/scrooloose/vim-slumlord)

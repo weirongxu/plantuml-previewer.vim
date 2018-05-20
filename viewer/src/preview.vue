@@ -30,6 +30,7 @@
     width: 100%;
     height: 100%;
   }
+  cursor: move;
 }
 </style>
 
@@ -60,7 +61,7 @@ export default {
   },
   methods: {
     boxReset() {
-      let $wrapper = this.$refs.wrapper
+      const $wrapper = this.$refs.wrapper
       if ($wrapper.clientWidth / $wrapper.clientHeight > this.img.whRate) {
         this.boxResize({height: $wrapper.clientHeight})
       } else {
@@ -91,8 +92,8 @@ export default {
       if (left > 1) {
         left = 1
       }
-      let $wrapper = this.$refs.wrapper
-      let $box = this.$refs.box
+      const $wrapper = this.$refs.wrapper
+      const $box = this.$refs.box
       this.center.left = left
       this.center.top = top
       $box.style.top = (top * $wrapper.clientHeight - this.img.height / 2) + 'px'
@@ -101,9 +102,9 @@ export default {
       // $box.style.left = ($wrapper.clientWidth/2 - left*this.img.width) + 'px'
     },
     bindEvent() {
-      let $wrapper = this.$refs.wrapper
-      let $box = this.$refs.box
-      var dragger = new Dragger($box)
+      const $wrapper = this.$refs.wrapper
+      const $box = this.$refs.box
+      const dragger = new Dragger($box)
       dragger.on('dragEnd', event => {
         let {top, left} = $box.style
         top = parseFloat(top)
@@ -116,11 +117,9 @@ export default {
       addWheelListener($wrapper, e => {
         e.preventDefault()
         let {top, left} = this.center
-        if (e.wheelDelta > 0) {
-          this.boxResize({width: this.img.width * 1.1})
-          this.boxCenter({top, left})
-        } else {
-          this.boxResize({width: this.img.width * 0.9})
+        const width = this.img.width + e.deltaY * 10
+        if (width > 100) {
+          this.boxResize({width})
           this.boxCenter({top, left})
         }
       })
@@ -145,7 +144,7 @@ export default {
     this.$once('loadedImage', () => {
       setTimeout(() => {
         this.boxReset.call(this)
-      }, 500)
+      }, 300)
     })
     if (this.$refs.img.complete) {
       this.$emit('loadedImage')
