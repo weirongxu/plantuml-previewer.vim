@@ -37,11 +37,11 @@
 <script>
 import {addWheelListener, removeWheelListener} from 'wheel'
 import Dragger from 'draggabilly'
-// import url from '!file-loader!./tmp.svg'
+
+const $tmpImage = new Image()
 
 export default {
   data() {
-    // const diagramUrl = process.env.NODE_ENV === 'production' ? '../tmp.svg' : url
     const diagramUrl = '../tmp.svg'
     return {
       img: {
@@ -70,7 +70,7 @@ export default {
       this.boxCenter()
     },
     boxResize({width = null, height = null} = {}) {
-      let $box = this.$refs.box
+      const $box = this.$refs.box
       if (width) {
         this.img.width = width
         this.img.height = width / this.img.whRate
@@ -98,8 +98,6 @@ export default {
       this.center.top = top
       $box.style.top = (top * $wrapper.clientHeight - this.img.height / 2) + 'px'
       $box.style.left = (left * $wrapper.clientWidth - this.img.width / 2) + 'px'
-      // $box.style.top = ($wrapper.clientHeight/2 - top*this.img.height) + 'px'
-      // $box.style.left = ($wrapper.clientWidth/2 - left*this.img.width) + 'px'
     },
     bindEvent() {
       const $wrapper = this.$refs.wrapper
@@ -111,8 +109,6 @@ export default {
         left = parseFloat(left)
         this.center.left = (this.img.width / 2 + left) / $wrapper.clientWidth
         this.center.top = (this.img.height / 2 + top) / $wrapper.clientHeight
-        // this.center.top = ($wrapper.clientHeight/2 - top)/this.img.height
-        // this.center.left = ($wrapper.clientWidth/2 - left)/this.img.width
       })
       addWheelListener($wrapper, e => {
         e.preventDefault()
@@ -123,37 +119,32 @@ export default {
           this.boxCenter({top, left})
         }
       })
-    },
-    reloadImage() {
-      let url = this.diagramUrl + '?' + Date.now()
-      let $img = new Image()
-      $img.src = url
-      $img.addEventListener('load', () => {
-        this.url = url
-        this.img.realWidth = $img.width
-        this.img.realHeight = $img.height
-        let whRate = $img.width / $img.height
+
+      $tmpImage.addEventListener('load', () => {
+        this.url = $tmpImage.src
+        this.img.realWidth = $tmpImage.width
+        this.img.realHeight = $tmpImage.height
+        const whRate = $tmpImage.width / $tmpImage.height
         if (this.img.whRate !== whRate) {
           this.img.height = this.img.width / whRate
           this.img.whRate = whRate
         }
+        $tmpImage.src = null
       })
+    },
+    reloadImage() {
+      $tmpImage.src = this.diagramUrl + '?' + Date.now()
     },
   },
   mounted() {
-    this.$once('loadedImage', () => {
-      setTimeout(() => {
-        this.boxReset.call(this)
-      }, 300)
-    })
-    if (this.$refs.img.complete) {
-      this.$emit('loadedImage')
-    }
+    setTimeout(() => {
+      this.boxReset.call(this)
+    }, 300)
     this.bindEvent()
     this.reloadImage()
     setInterval(() => {
       this.reloadImage()
-    }, 1000)
+    }, 2000)
   },
 }
 </script>
