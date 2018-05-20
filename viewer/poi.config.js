@@ -1,5 +1,5 @@
 module.exports = {
-  configuareWebpack(config, context) {
+  configureWebpack(config, context) {
     if (context.command === 'build') {
       config.output.publicPath = './'
     }
