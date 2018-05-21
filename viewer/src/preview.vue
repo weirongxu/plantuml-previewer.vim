@@ -3,7 +3,7 @@
     <div
       class="box"
       :style="{width: img.width + 'px', height: img.height + 'px'}"
-      :data-center="`left: ${center.left}, top: ${center.top}`"
+      :data-center="`left: ${relativeCenter.left}, top: ${relativeCenter.top}`"
       ref="box">
       <img
         v-show="url"
@@ -52,7 +52,7 @@ export default {
         height: null,
         whRate: null,
       },
-      center: {
+      relativeCenter: {
         left: null,
         top: null,
       },
@@ -82,25 +82,15 @@ export default {
         this.img.width = height * this.img.whRate
       }
     },
-    boxCenter({top = 0.5, left = 0.5} = {}) {
-      if (top < 0) {
-        top = 0
-      }
-      if (top > 1) {
-        top = 1
-      }
-      if (left < 0) {
-        left = 0
-      }
-      if (left > 1) {
-        left = 1
-      }
+    boxCenter({top = 0, left = 0} = {}) {
       const $wrapper = this.$refs.wrapper
       const $box = this.$refs.box
-      this.center.left = left
-      this.center.top = top
-      $box.style.top = (top * $wrapper.clientHeight - this.img.height / 2) + 'px'
-      $box.style.left = (left * $wrapper.clientWidth - this.img.width / 2) + 'px'
+      this.relativeCenter.left = left
+      this.relativeCenter.top = top
+      left = $wrapper.clientWidth/2 - (left * this.img.width) - this.img.width/2
+      top = $wrapper.clientHeight/2 - (top * this.img.height) - this.img.height/2
+      $box.style.left = left + 'px'
+      $box.style.top = top + 'px'
     },
     bindEvent() {
       const $wrapper = this.$refs.wrapper
@@ -110,13 +100,14 @@ export default {
         let {top, left} = $box.style
         top = parseFloat(top)
         left = parseFloat(left)
-        this.center.left = (this.img.width / 2 + left) / $wrapper.clientWidth
-        this.center.top = (this.img.height / 2 + top) / $wrapper.clientHeight
+
+        this.relativeCenter.left = ($wrapper.clientWidth/2 - (left + this.img.width/2)) / this.img.width
+        this.relativeCenter.top = ($wrapper.clientHeight/2 - (top + this.img.height/2)) / this.img.height
       })
       addWheelListener($wrapper, e => {
         e.preventDefault()
-        let {top, left} = this.center
-        const width = this.img.width + e.deltaY * 10
+        let {top, left} = this.relativeCenter
+        const width = this.img.width + e.deltaY
         if (width > 100) {
           this.boxResize({width})
           this.boxCenter({top, left})
