@@ -8,7 +8,6 @@
       <img
         v-show="url"
         :src="url"
-        ref="img"
         @load="() => $emit('loadedImage')">
     </div>
   </div>
@@ -107,7 +106,7 @@ export default {
       addWheelListener($wrapper, e => {
         e.preventDefault()
         let {top, left} = this.relativeCenter
-        const width = this.img.width + e.deltaY
+        const width = this.img.width - e.deltaY * 2
         if (width > 100) {
           this.boxResize({width})
           this.boxCenter({top, left})
