@@ -1,4 +1,5 @@
-let s:P = vital#plantuml_previewer#new().import('System.Process')
+let s:Process = vital#plantuml_previewer#new().import('System.Process')
+let s:Job = vital#plantuml_previewer#new().import('System.Job')
 let s:is_win = has('win32') || has('win64') || has('win95')
 
 let s:base_path = expand("<sfile>:p:h") . '/..'
@@ -38,7 +39,15 @@ function! plantuml_previewer#refresh() "{{{
   let content = getline(1,'$')
   call writefile(content, s:tmp_puml_path)
   let cmd = [s:update_uml_script_path, s:jar_path, s:tmp_puml_path, localtime(), s:tmp_js_path]
-  let result = s:P.execute(cmd, {
-        \ 'background': 1,
-        \})
+  if s:Job.is_available()
+    call s:Job.start(cmd)
+  else
+    try
+      call s:Process.execute(cmd, {
+            \ 'background': 1,
+            \})
+    catch
+      call s:Process.execute(cmd)
+    endtry
+  endif
 endfunction "}}}
