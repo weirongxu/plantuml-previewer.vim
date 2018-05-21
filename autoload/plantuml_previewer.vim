@@ -1,10 +1,13 @@
 let s:P = vital#plantuml_previewer#new().import('System.Process')
-call s:P.register('System.Process.Job')
+let s:is_win = has('win32') || has('win64') || has('win95')
+
 let s:base_path = expand("<sfile>:p:h") . '/..'
+let s:update_uml_script_path = s:base_path . '/script/update-uml' . (s:is_win ? '.cmd' : '.sh')
 let s:jar_path = s:base_path . '/lib/plantuml.jar'
 let s:viewer_base_path = s:base_path . '/viewer'
 let s:tmp_puml_path = s:viewer_base_path . '/tmp.puml'
 let s:tmp_svg_path = s:viewer_base_path . '/tmp.svg'
+let s:tmp_js_path = s:viewer_base_path . '/tmp.js'
 let s:viewer_html_path = s:viewer_base_path . '/dist/index.html'
 
 function! plantuml_previewer#start() "{{{
@@ -34,17 +37,8 @@ endfunction "}}}
 function! plantuml_previewer#refresh() "{{{
   let content = getline(1,'$')
   call writefile(content, s:tmp_puml_path)
-  let cmd = ['java', '-Dapple.awt.UIElement=true', '-jar', s:jar_path, s:tmp_puml_path , '-tsvg']
-  try
-    call s:P.execute(cmd, {
+  let cmd = [s:update_uml_script_path, s:jar_path, s:tmp_puml_path, localtime(), s:tmp_js_path]
+  let result = s:P.execute(cmd, {
         \ 'background': 1,
-        \ 'clients': [
-        \   'System.Process.Job',
-        \   'System.Process.Vimproc',
-        \   'System.Process.System',
-        \ ],
         \})
-  catch /.*/
-    call s:P.execute(cmd)
-  endtry
 endfunction "}}}
