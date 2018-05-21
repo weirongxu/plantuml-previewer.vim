@@ -148,14 +148,15 @@ export default {
     reloadUpdateJs() {
       const head = document.getElementsByTagName('head')[0]
       const script = document.createElement('script')
-      script.id = 'update-js'
-      script.type = 'text/javascript'
-      script.src = updateJsPath + '?t=' + Date.now()
-      script.addEventListener('load', () => {
+      const removeScript = () => {
         setTimeout(() => {
           head.removeChild(script)
         }, 200)
-      })
+      }
+      script.type = 'text/javascript'
+      script.addEventListener('error', removeScript)
+      script.addEventListener('load', removeScript)
+      script.src = updateJsPath + '?t=' + Date.now()
       head.appendChild(script)
     },
   },
