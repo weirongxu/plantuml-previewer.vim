@@ -38,11 +38,12 @@
 import {addWheelListener, removeWheelListener} from 'wheel'
 import Dragger from 'draggabilly'
 
+const updateJsPath = '../tmp.js'
+const diagramUrl = '../tmp.svg'
 const $tmpImage = new Image()
 
 export default {
   data() {
-    const diagramUrl = '../tmp.svg'
     return {
       img: {
         realWidth: null,
@@ -55,6 +56,7 @@ export default {
         left: null,
         top: null,
       },
+      lastTimestamp: null,
       needReset: true,
       diagramUrl,
       url: null,
@@ -121,7 +123,8 @@ export default {
         }
       })
 
-      $tmpImage.addEventListener('error', () => {
+      $tmpImage.addEventListener('error', (error) => {
+        console.error(error)
         this.needReset = true
       })
       $tmpImage.addEventListener('load', () => {
@@ -140,14 +143,33 @@ export default {
       })
     },
     reloadImage() {
-      $tmpImage.src = this.diagramUrl + '?' + Date.now()
+      $tmpImage.src = this.diagramUrl + '?t=' + Date.now()
+    },
+    reloadUpdateJs() {
+      const head = document.getElementsByTagName('head')[0]
+      const script = document.createElement('script')
+      script.id = 'update-js'
+      script.type = 'text/javascript'
+      script.src = updateJsPath + '?t=' + Date.now()
+      script.addEventListener('load', () => {
+        setTimeout(() => {
+          head.removeChild(script)
+        }, 200)
+      })
+      head.appendChild(script)
     },
   },
   mounted() {
     this.bindEvent()
     this.reloadImage()
+    window.updateDiagramURL = (timestamp) => {
+      if (timestamp !== this.lastTimestamp) {
+        this.lastTimestamp = timestamp
+        this.reloadImage()
+      }
+    }
     setInterval(() => {
-      this.reloadImage()
+      this.reloadUpdateJs()
     }, 1000)
   },
 }
