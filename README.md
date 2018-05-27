@@ -1,5 +1,5 @@
 # Plantuml Previewer Vim
-Vim plugin for preview [Plantuml](http://plantuml.com/)
+Vim/NeoVim plugin for preview [PlantUML](http://plantuml.com/)
 
 ![image](https://user-images.githubusercontent.com/1709861/30002999-df3281b8-90e9-11e7-88c3-d2c0a98ff10b.png)
 

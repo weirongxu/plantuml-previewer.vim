@@ -1,0 +1,58 @@
+*plantuml-previewer.txt*		plantuml-previewer is a plugin to preview PlantUML
+
+Version: 1.1.0
+Author:  Weirong Xu <weirongxu.raidou@gmail.com>
+License: MIT License
+
+==============================================================================
+CONTENTS 					*plantuml-previewer-contents*
+
+Introduction		|plantuml-previewer-introduction|
+Install			|plantuml-previewer-install|
+Usage			|plantuml-previewer-usage|
+Interface		|plantuml-previewer-interface|
+  Commands		  |plantuml-previewer-interface-commands|
+  Variables		  |plantuml-previewer-interface-variables|
+
+==============================================================================
+INTRODUCTION					*plantuml-previewer-introduction*
+
+plantuml-previewer is a plugin to preview PlantUML
+
+==============================================================================
+INSTALL						*plantuml-previewer-install*
+
+Dependencies
+- Java
+- Graphviz : https://www.graphviz.org/download/
+  - Mac >
+    brew install graphviz
+<
+  - Ubuntu >
+    apt-get install graphviz
+<
+  - Other
+    https://www.graphviz.org/download/
+- open-browser.vim https://github.com/tyru/open-browser.vim
+- aklt/plantuml-syntax https://github.com/aklt/plantuml-syntax (vim syntax file for plantuml)
+
+==============================================================================
+USAGE						*plantuml-previewer-usage*
+
+1. Start editing plantuml file in Vim
+2. Run |:PlantumlOpen| to open previewer webpage in browser
+3. Saving plantuml file in Vim, then previewer webpage will refresh
+
+==============================================================================
+INTERFACE					*plantuml-previewer-interface*
+
+-----------------------------------------------------------------------------
+COMMAND						*plantuml-previewer-interface-command*
+
+						*:PlantumlOpen*
+:PlantumlOpen
+	Open previewer webpage in browser, and watch this file
+
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:
