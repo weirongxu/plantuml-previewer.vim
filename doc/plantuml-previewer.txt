@@ -1,6 +1,6 @@
 *plantuml-previewer.txt*		plugin for preview PlantUML
 
-Version: 1.1.0
+Version: 1.2.1
 Author:  Weirong Xu <weirongxu.raidou@gmail.com>
 License: MIT License
 
@@ -47,7 +47,7 @@ USAGE					*plantuml-previewer-usage*
 INTERFACE				*plantuml-previewer-interface*
 
 -----------------------------------------------------------------------------
-COMMAND					*plantuml-previewer-interface-command*
+COMMANDS					*plantuml-previewer-interface-commands*
 
 						*:PlantumlOpen*
 :PlantumlOpen
