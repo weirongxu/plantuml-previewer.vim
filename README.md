@@ -16,6 +16,18 @@ Vim/NeoVim plugin for preview [PlantUML](http://plantuml.com/)
 2. Run `:PlantumlOpen` to open previewer webpage in browser
 3. Saving plantuml file in Vim, then previewer webpage will refresh
 
+### Commands
+```
+:PlantumlOpen
+```
+Open previewer webpage in browser, and watch current buffer
+
+### Variables
+```
+g:plantuml_previewer#plantuml_jar_path
+```
+Custom plantuml.jar file path
+
 ## Related
 * [vim-slumlord](https://github.com/scrooloose/vim-slumlord)
 * [previm](https://github.com/kannokanno/previm)

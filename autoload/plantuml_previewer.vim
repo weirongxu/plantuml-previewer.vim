@@ -35,10 +35,14 @@ function! plantuml_previewer#stop() "{{{
   augroup END
 endfunction "}}}
 
+function! plantuml_previewer#jar_path() "{{{
+  return get(g:, 'plantuml_previewer#plantuml_jar_path', s:jar_path)
+endfunction "}}}
+
 function! plantuml_previewer#refresh() "{{{
   let content = getline(1,'$')
   call writefile(content, s:tmp_puml_path)
-  let cmd = [s:update_uml_script_path, s:jar_path, s:tmp_puml_path, localtime(), s:tmp_js_path]
+  let cmd = [s:update_uml_script_path, plantuml_previewer#jar_path(), s:tmp_puml_path, localtime(), s:tmp_js_path]
   if s:Job.is_available()
     call s:Job.start(cmd)
   else

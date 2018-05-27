@@ -1,11 +1,11 @@
-*plantuml-previewer.txt*		plantuml-previewer is a plugin to preview PlantUML
+*plantuml-previewer.txt*		plugin for preview PlantUML
 
 Version: 1.1.0
 Author:  Weirong Xu <weirongxu.raidou@gmail.com>
 License: MIT License
 
 ==============================================================================
-CONTENTS 					*plantuml-previewer-contents*
+CONTENTS				*plantuml-previewer-contents*
 
 Introduction		|plantuml-previewer-introduction|
 Install			|plantuml-previewer-install|
@@ -15,12 +15,12 @@ Interface		|plantuml-previewer-interface|
   Variables		  |plantuml-previewer-interface-variables|
 
 ==============================================================================
-INTRODUCTION					*plantuml-previewer-introduction*
+INTRODUCTION				*plantuml-previewer-introduction*
 
 plantuml-previewer is a plugin to preview PlantUML
 
 ==============================================================================
-INSTALL						*plantuml-previewer-install*
+INSTALL					*plantuml-previewer-install*
 
 Dependencies
 - Java
@@ -37,21 +37,29 @@ Dependencies
 - aklt/plantuml-syntax https://github.com/aklt/plantuml-syntax (vim syntax file for plantuml)
 
 ==============================================================================
-USAGE						*plantuml-previewer-usage*
+USAGE					*plantuml-previewer-usage*
 
 1. Start editing plantuml file in Vim
 2. Run |:PlantumlOpen| to open previewer webpage in browser
 3. Saving plantuml file in Vim, then previewer webpage will refresh
 
 ==============================================================================
-INTERFACE					*plantuml-previewer-interface*
+INTERFACE				*plantuml-previewer-interface*
 
 -----------------------------------------------------------------------------
-COMMAND						*plantuml-previewer-interface-command*
+COMMAND					*plantuml-previewer-interface-command*
 
 						*:PlantumlOpen*
 :PlantumlOpen
-	Open previewer webpage in browser, and watch this file
+	Open previewer webpage in browser, and watch current buffer
+
+-----------------------------------------------------------------------------
+VARIABLES				*plantuml-previewer-interface-variables*
+
+				*g:plantuml_previewer#plantuml_jar_path*
+g:plantuml_previewer#plantuml_jar_path
+	plantuml.jar path
+	Default: lib/plantuml.jar
 
 
 ==============================================================================
