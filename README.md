@@ -17,10 +17,24 @@ Vim/NeoVim plugin for preview [PlantUML](http://plantuml.com/)
 3. Saving plantuml file in Vim, then previewer webpage will refresh
 
 ### Commands
-```
-:PlantumlOpen
-```
+
+#### PlantumlOpen
 Open previewer webpage in browser, and watch current buffer
+
+#### PlantumlStop
+Stop watch buffer
+
+#### PlantumlSave {filepath} [{format}]
+Export uml diagram to file path  
+Available formats  
+> png, svg, eps, pdf, vdx, xmi,
+> scxml, html, txt, utxt, latex
+
+Example:
+```
+:PlantumlSave diagram.png
+:PlantumlSave diagram.svg
+```
 
 ### Variables
 ```

@@ -53,6 +53,24 @@ COMMANDS					*plantuml-previewer-interface-commands*
 :PlantumlOpen
 	Open previewer webpage in browser, and watch current buffer
 
+						*:PlantumlStop*
+:PlantumlStop
+	Stop watch buffer
+
+						*:PlantumlSave*
+:PlantumlSave {filepath} [{format}]
+	Export uml diagram to file path.
+	If {format} is missing, the {format} will be guessed by {filepath}
+	extension.
+
+	Available formats: >
+	png, svg, eps, pdf, vdx, xmi,
+	scxml, html, txt, utxt, latex
+<
+	Example: >
+	:PlantumlSave diagram.png
+	:PlantumlSave diagram.svg
+<
 -----------------------------------------------------------------------------
 VARIABLES				*plantuml-previewer-interface-variables*
 
