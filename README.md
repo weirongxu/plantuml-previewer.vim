@@ -1,7 +1,7 @@
 # Plantuml Previewer Vim
 Vim/NeoVim plugin for preview [PlantUML](http://plantuml.com/)
 
-![image](https://user-images.githubusercontent.com/1709861/30002999-df3281b8-90e9-11e7-88c3-d2c0a98ff10b.png)
+![image](https://user-images.githubusercontent.com/1709861/40650003-dcd75a76-6364-11e8-8cb1-40d710a0cc0a.png)
 
 ## Dependencies
 * Java
