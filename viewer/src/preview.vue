@@ -1,20 +1,51 @@
 <template>
-  <div class="wrapper" ref="wrapper" @dblclick="boxReset">
-    <div
-      class="box"
-      :style="{width: img.width + 'px', height: img.height + 'px'}"
-      :data-center="`left: ${relativeCenter.left}, top: ${relativeCenter.top}`"
-      ref="box">
-      <img
+  <div class="body">
+    <div class="tools">
+      <a title="Double click" @click="boxReset"><img src="./icons/home.svg"></a>
+      <a title="Mouse wheel" @click="zoom(-100)"><img src="./icons/zoom-in.svg"></a>
+      <a title="Mouse wheel" @click="zoom(100)"><img src="./icons/zoom-out.svg"></a>
+    </div>
+    <div class="wrapper" ref="wrapper" @dblclick="boxReset">
+      <div
+        class="box"
+        :style="{width: img.width + 'px', height: img.height + 'px'}"
+        :data-center="`left: ${relativeCenter.left}, top: ${relativeCenter.top}`"
+        ref="box">
+        <img
         v-show="url"
         :src="url"
         @load="() => $emit('loadedImage')">
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.body {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.tools {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  a {
+    cursor: pointer;
+    display: block;
+    width: 30px;
+    height: 30px;
+    img {
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
 .wrapper {
+  flex: 1;
   width: 100%;
   height: 100%;
   position: relative;
@@ -105,12 +136,7 @@ export default {
       })
       addWheelListener($wrapper, e => {
         e.preventDefault()
-        let {top, left} = this.relativeCenter
-        const width = this.img.width - e.deltaY * 2
-        if (width > 100) {
-          this.boxResize({width})
-          this.boxCenter({top, left})
-        }
+        this.zoom(e.deltaY)
       })
 
       $tmpImage.addEventListener('error', (error) => {
@@ -131,6 +157,14 @@ export default {
           this.boxReset()
         }
       })
+    },
+    zoom(delta) {
+      const width = this.img.width - delta * this.img.width / 1000
+      if (width > 100) {
+        const {top, left} = this.relativeCenter
+        this.boxResize({width})
+        this.boxCenter({top, left})
+      }
     },
     reloadImage() {
       $tmpImage.src = this.diagramUrl + '?t=' + Date.now()
