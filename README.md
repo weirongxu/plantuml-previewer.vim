@@ -42,6 +42,16 @@ g:plantuml_previewer#plantuml_jar_path
 ```
 Custom plantuml.jar file path
 
+If plant uml was installed by homebrew, you can add the following code to your `.vimrc` to use the version installed by homebrew:
+
+```vim
+  au FileType plantuml let g:plantuml_previewer#plantuml_jar_path = 
+        \ substitute(
+        \   system("cat `which plantuml` | grep 'plantuml.jar' | perl -pe 's/.* (\\S+plantuml\\.jar).*/\\1/'"),
+        \   '\n', '', 'g'
+        \ )
+```
+
 ## Related
 * [vim-slumlord](https://github.com/scrooloose/vim-slumlord)
 * [previm](https://github.com/kannokanno/previm)
