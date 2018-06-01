@@ -44,7 +44,8 @@ function! plantuml_previewer#stop() "{{{
 endfunction "}}}
 
 function! plantuml_previewer#jar_path() "{{{
-  return get(g:, 'plantuml_previewer#plantuml_jar_path', s:jar_path)
+  let path = get(g:, 'plantuml_previewer#plantuml_jar_path', 0)
+  return path == 0 ? s:jar_path : path
 endfunction "}}}
 
 function! s:run_in_background(cmd) "{{{
@@ -59,9 +60,6 @@ function! s:run_in_background(cmd) "{{{
       call s:Process.execute(a:cmd)
     endtry
   endif
-endfunction "}}}
-
-function! s:generate_target_path(puml_path, target_type) "{{{
 endfunction "}}}
 
 function! plantuml_previewer#refresh() "{{{
