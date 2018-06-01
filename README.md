@@ -45,11 +45,11 @@ Custom plantuml.jar file path
 If plant uml was installed by homebrew, you can add the following code to your `.vimrc` to use the version installed by homebrew:
 
 ```vim
-  au FileType plantuml let g:plantuml_previewer#plantuml_jar_path = 
-        \ substitute(
-        \   system("cat `which plantuml` | grep 'plantuml.jar' | perl -pe 's/.* (\\S+plantuml\\.jar).*/\\1/'"),
-        \   '\n', '', 'g'
-        \ )
+au FileType plantuml let g:plantuml_previewer#plantuml_jar_path = get(
+    \  matchlist(system('cat `which plantuml` | grep plantuml.jar'), '\v.* (\S+plantuml\.jar).*'),
+    \  1,
+    \  0
+    \)
 ```
 
 ## Related
