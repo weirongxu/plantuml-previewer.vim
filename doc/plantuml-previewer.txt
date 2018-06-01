@@ -58,8 +58,10 @@ COMMANDS					*plantuml-previewer-interface-commands*
 	Stop watch buffer
 
 						*:PlantumlSave*
-:PlantumlSave {filepath} [{format}]
-	Export uml diagram to file path.
+:PlantumlSave [{filepath}] [{format}]
+	Export uml diagram
+	If {filepath} is missing, the {filepath} using the same file path as
+	plant uml, and default extension guessed by |g:plantuml_previewer#save_format|
 	If {format} is missing, the {format} will be guessed by {filepath}
 	extension.
 
@@ -68,6 +70,9 @@ COMMANDS					*plantuml-previewer-interface-commands*
 	scxml, html, txt, utxt, latex
 <
 	Example: >
+	:e diagram.puml
+
+	:PlantumlSave
 	:PlantumlSave diagram.png
 	:PlantumlSave diagram.svg
 <
@@ -77,7 +82,12 @@ VARIABLES				*plantuml-previewer-interface-variables*
 				*g:plantuml_previewer#plantuml_jar_path*
 g:plantuml_previewer#plantuml_jar_path
 	plantuml.jar path
-	Default: lib/plantuml.jar
+	Default: "lib/plantuml.jar"
+
+				*g:plantuml_previewer#save_format*
+g:plantuml_previewer#save_format
+	default |:PlantumlSave| format
+	Default: "png"
 
 
 ==============================================================================

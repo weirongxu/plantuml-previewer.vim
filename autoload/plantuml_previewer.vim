@@ -4,7 +4,7 @@ let s:is_win = has('win32') || has('win64') || has('win95')
 
 let s:base_path = expand("<sfile>:p:h") . '/..'
 
-let s:jar_path = s:base_path . '/lib/plantuml.jar'
+let s:default_jar_path = s:base_path . '/lib/plantuml.jar'
 
 let s:tmp_path = s:base_path . '/tmp'
 
@@ -43,9 +43,25 @@ function! plantuml_previewer#stop() "{{{
   augroup END
 endfunction "}}}
 
-function! plantuml_previewer#jar_path() "{{{
+function! s:is_zero(val) "{{{
+  return type(a:val) == type(0) && a:val == 0
+endfunction "}}}
+
+function! s:jar_path() "{{{
   let path = get(g:, 'plantuml_previewer#plantuml_jar_path', 0)
-  return path == 0 ? s:jar_path : path
+  return s:is_zero(path) ? s:default_jar_path : path
+endfunction "}}}
+
+function! s:save_format() "{{{
+  return get(g:, 'plantuml_previewer#save_format', 'png')
+endfunction "}}}
+
+function! s:ext_to_fmt(ext) "{{{
+  return a:ext == 'tex' ? 'latex' : a:ext
+endfunction "}}}
+
+function! s:fmt_to_ext(fmt) "{{{
+  return a:fmt == 'latex' ? 'tex' : a:fmt
 endfunction "}}}
 
 function! s:run_in_background(cmd) "{{{
@@ -67,7 +83,7 @@ function! plantuml_previewer#refresh() "{{{
   call writefile(content, s:viewer_tmp_puml_path)
   let cmd = [
         \ s:update_viewer_script_path,
-        \ plantuml_previewer#jar_path(),
+        \ s:jar_path(),
         \ s:viewer_tmp_puml_path,
         \ 'svg',
         \ localtime(),
@@ -76,27 +92,29 @@ function! plantuml_previewer#refresh() "{{{
   call s:run_in_background(cmd)
 endfunction "}}}
 
-function! plantuml_previewer#save_as(save_path) "{{{
-  let target_type = get(a:000, 1, 0)
-  let save_path = fnamemodify(a:save_path, ':p')
-  if target_type == 0
-    let ext = fnamemodify(save_path, ':e')
-    if ext == ''
-      let target_type = 'svg'
-    else
-      let target_type = ext
-    endif
+function! plantuml_previewer#save_as(...) "{{{
+  let save_path = get(a:000, 0, 0)
+  let target_format = get(a:000, 1, 0)
+  if s:is_zero(save_path)
+    let source_name = expand('%:t:r')
+    let save_path = printf("%s.%s", source_name, s:fmt_to_ext(s:save_format()))
+  else
+    let save_path = fnamemodify(save_path, ':p')
   endif
-  let target_path = fnamemodify(s:save_as_tmp_puml_path, ':p:r') . '.' . target_type
+  if s:is_zero(target_format)
+    let ext = fnamemodify(save_path, ':e')
+    let target_format = ext == '' ? s:save_format() : s:ext_to_fmt(ext)
+  endif
+  let target_path = printf("%s.%s", fnamemodify(s:save_as_tmp_puml_path, ':p:r'), target_format)
   let content = getline(1,'$')
   call mkdir(s:tmp_path, 'p')
   call writefile(content, s:save_as_tmp_puml_path)
   call mkdir(fnamemodify(save_path, ':p:h'), 'p')
   let cmd = [
         \ s:save_as_script_path,
-        \ plantuml_previewer#jar_path(),
+        \ s:jar_path(),
         \ s:save_as_tmp_puml_path,
-        \ target_type,
+        \ target_format,
         \ target_path,
         \ save_path,
         \ ]

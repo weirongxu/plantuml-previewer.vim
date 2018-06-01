@@ -24,7 +24,7 @@ Open previewer webpage in browser, and watch current buffer
 #### PlantumlStop
 Stop watch buffer
 
-#### PlantumlSave {filepath} [{format}]
+#### PlantumlSave [{filepath}] [{format}]
 Export uml diagram to file path  
 Available formats  
 > png, svg, eps, pdf, vdx, xmi,
@@ -32,14 +32,15 @@ Available formats
 
 Example:
 ```
+:e diagram.puml
+
+:PlantumlSave
 :PlantumlSave diagram.png
 :PlantumlSave diagram.svg
 ```
 
 ### Variables
-```
-g:plantuml_previewer#plantuml_jar_path
-```
+#### `g:plantuml_previewer#plantuml_jar_path`
 Custom plantuml.jar file path
 
 If plant uml was installed by homebrew, you can add the following code to your `.vimrc` to use the version installed by homebrew:
@@ -51,6 +52,10 @@ au FileType plantuml let g:plantuml_previewer#plantuml_jar_path = get(
     \  0
     \)
 ```
+
+#### `g:plantuml_previewer#save_format`
+default `:PlantumlSave` format
+Default: 'png'
 
 ## Related
 * [vim-slumlord](https://github.com/scrooloose/vim-slumlord)
