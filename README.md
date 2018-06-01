@@ -24,7 +24,7 @@ Open previewer webpage in browser, and watch current buffer
 #### PlantumlStop
 Stop watch buffer
 
-#### PlantumlSave [{filepath}] [{format}]
+#### PlantumlSave [filepath] [format]
 Export uml diagram to file path  
 Available formats  
 > png, svg, eps, pdf, vdx, xmi,
@@ -54,7 +54,7 @@ au FileType plantuml let g:plantuml_previewer#plantuml_jar_path = get(
 ```
 
 #### `g:plantuml_previewer#save_format`
-default `:PlantumlSave` format
+`:PlantumlSave` default format  
 Default: 'png'
 
 ## Related

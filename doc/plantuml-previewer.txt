@@ -86,7 +86,7 @@ g:plantuml_previewer#plantuml_jar_path
 
 				*g:plantuml_previewer#save_format*
 g:plantuml_previewer#save_format
-	default |:PlantumlSave| format
+	|:PlantumlSave| default format
 	Default: "png"
 
 
