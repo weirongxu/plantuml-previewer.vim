@@ -47,7 +47,7 @@ If plant uml was installed by homebrew, you can add the following code to your `
 
 ```vim
 au FileType plantuml let g:plantuml_previewer#plantuml_jar_path = get(
-    \  matchlist(system('grep plantuml.jar /usr/local/bin/plantuml'), '\v.* (\S+plantuml\.jar).*'),
+    \  matchlist(system('cat `which plantuml` | grep plantuml.jar'), '\v.*\s[''"]?(\S+plantuml\.jar).*'),
     \  1,
     \  0
     \)
