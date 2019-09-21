@@ -12,11 +12,6 @@ let s:save_as_script_path = s:base_path . '/script/save-as' . (s:is_win ? '.cmd'
 let s:save_as_tmp_puml_path = s:tmp_path . '/tmp.puml'
 
 let s:update_viewer_script_path = s:base_path . '/script/update-viewer' . (s:is_win ? '.cmd' : '.sh')
-let s:viewer_base_path = s:base_path . '/viewer'
-let s:viewer_tmp_puml_path = s:viewer_base_path . '/tmp.puml'
-let s:viewer_tmp_svg_path = s:viewer_base_path . '/tmp.svg'
-let s:viewer_tmp_js_path = s:viewer_base_path . '/tmp.js'
-let s:viewer_html_path = s:viewer_base_path . '/dist/index.html'
 
 function! plantuml_previewer#start() "{{{
   if !executable('java')
@@ -27,15 +22,19 @@ function! plantuml_previewer#start() "{{{
     echoerr 'require openbrowser'
     return
   endif
-  call delete(s:viewer_tmp_puml_path)
-  call delete(s:viewer_tmp_svg_path)
+  call delete(s:viewer_tmp_puml_path())
+  call delete(s:viewer_tmp_svg_path())
   call plantuml_previewer#refresh()
   augroup plantuml_previewer
     autocmd!
     autocmd BufWritePost <buffer> call plantuml_previewer#refresh()
   augroup END
-  call OpenBrowser(s:viewer_html_path)
 endfunction "}}}
+
+function! plantuml_previewer#open() "{{{
+  call plantuml_previewer#start()
+  call OpenBrowser(s:viewer_html_path())
+endfunction }}}
 
 function! plantuml_previewer#stop() "{{{
   augroup plantuml_previewer
@@ -45,6 +44,31 @@ endfunction "}}}
 
 function! s:is_zero(val) "{{{
   return type(a:val) == type(0) && a:val == 0
+endfunction "}}}
+
+function! plantuml_previewer#default_viewer_path() "{{{
+  return s:base_path . '/viewer'
+endfunction "}}}
+
+function! s:viewer_path() "{{{
+  let path = get(g:, 'plantuml_previewer#viewer_path', 0)
+  return s:is_zero(path) ? plantuml_previewer#default_viewer_path() : path
+endfunction "}}}
+
+function! s:viewer_tmp_puml_path() "{{{
+  return s:viewer_path() . '/tmp.puml'
+endfunction "}}}
+
+function! s:viewer_tmp_svg_path() "{{{
+  return s:viewer_path() . '/tmp.svg'
+endfunction "}}}
+
+function! s:viewer_tmp_js_path() "{{{
+  return s:viewer_path() . '/tmp.js'
+endfunction "}}}
+
+function! s:viewer_html_path() "{{{
+  return s:viewer_path() . '/index.html'
 endfunction "}}}
 
 function! s:jar_path() "{{{
@@ -79,15 +103,16 @@ function! s:run_in_background(cmd) "{{{
 endfunction "}}}
 
 function! plantuml_previewer#refresh() "{{{
-  let content = getline(1,'$')
-  call writefile(content, s:viewer_tmp_puml_path)
+  let content = getline(1, '$')
+  echo s:viewer_tmp_puml_path()
+  call writefile(content, s:viewer_tmp_puml_path())
   let cmd = [
         \ s:update_viewer_script_path,
         \ s:jar_path(),
-        \ s:viewer_tmp_puml_path,
+        \ s:viewer_tmp_puml_path(),
         \ 'svg',
         \ localtime(),
-        \ s:viewer_tmp_js_path,
+        \ s:viewer_tmp_js_path(),
         \ ]
   call s:run_in_background(cmd)
 endfunction "}}}
