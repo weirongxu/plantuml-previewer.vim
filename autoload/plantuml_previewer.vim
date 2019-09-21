@@ -18,10 +18,6 @@ function! plantuml_previewer#start() "{{{
     echoerr 'require java'
     return
   endif
-  if !exists('*OpenBrowser') 
-    echoerr 'require openbrowser'
-    return
-  endif
   call delete(s:viewer_tmp_puml_path())
   call delete(s:viewer_tmp_svg_path())
   call plantuml_previewer#refresh()
@@ -32,6 +28,10 @@ function! plantuml_previewer#start() "{{{
 endfunction "}}}
 
 function! plantuml_previewer#open() "{{{
+  if !exists('*OpenBrowser')
+    echoerr 'require openbrowser'
+    return
+  endif
   call plantuml_previewer#start()
   call OpenBrowser(s:viewer_html_path())
 endfunction }}}

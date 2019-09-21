@@ -21,6 +21,9 @@ Vim/NeoVim plugin for preview [PlantUML](http://plantuml.com/)
 #### PlantumlOpen
 Open previewer webpage in browser, and watch current buffer
 
+#### PlantumlStart
+Like `PlantumlOpen`, but won't open in browser
+
 #### PlantumlStop
 Stop watch buffer
 
@@ -56,6 +59,22 @@ au FileType plantuml let g:plantuml_previewer#plantuml_jar_path = get(
 #### `g:plantuml_previewer#save_format`
 `:PlantumlSave` default format  
 Default: 'png'
+
+#### `g:plantuml_previewer#viewer_path`
+Custom plantuml viewer path.  
+`tmp.puml` and `tmp.svg` will output to here  
+
+You may need to use with `plantuml_previewer#default_viewer_path()`
+
+
+### Functions
+#### `plantuml_previewer#default_viewer_path()`
+Default path of viewer, it's useful to sync to a custom location.  
+
+use with rsync:
+```vim
+command PlantumlViewerRsync call system('rsync -r ' . plantuml_previewer#default_viewer_path() . '/ ' . g:plantuml_previewer#viewer_path . '/')
+```
 
 ## Related
 * [vim-slumlord](https://github.com/scrooloose/vim-slumlord)
