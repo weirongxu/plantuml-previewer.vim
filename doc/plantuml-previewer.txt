@@ -53,6 +53,10 @@ COMMANDS					*plantuml-previewer-interface-commands*
 :PlantumlOpen
 	Open previewer webpage in browser, and watch current buffer
 
+						*:PlantumlStart*
+:PlantumlStart
+	Like |PlantumlOpen|, but won't open in browser
+
 						*:PlantumlStop*
 :PlantumlStop
 	Stop watch buffer
@@ -89,6 +93,10 @@ g:plantuml_previewer#save_format
 	|:PlantumlSave| default format
 	Default: "png"
 
+				*g:plantuml_previewer#viewer_path*
+g:plantuml_previewer#viewer_path
+	Custom plantuml viewer path
+	tmp.puml` and `tmp.svg` will output to here
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:

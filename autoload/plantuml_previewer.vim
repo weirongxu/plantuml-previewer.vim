@@ -2,7 +2,7 @@ let s:Process = vital#plantuml_previewer#new().import('System.Process')
 let s:Job = vital#plantuml_previewer#new().import('System.Job')
 let s:is_win = has('win32') || has('win64') || has('win95')
 
-let s:base_path = expand("<sfile>:p:h") . '/..'
+let s:base_path = fnameescape(expand("<sfile>:p:h")) . '/..'
 
 let s:default_jar_path = s:base_path . '/lib/plantuml.jar'
 
@@ -17,6 +17,10 @@ function! plantuml_previewer#start() "{{{
   if !executable('java')
     echoerr 'require java'
     return
+  endif
+  let viewer_path = s:viewer_path()
+  if !isdirectory(viewer_path) && !filereadable(viewer_path)
+    call plantuml_previewer#copy_viewer_directory()
   endif
   call delete(s:viewer_tmp_puml_path())
   call delete(s:viewer_tmp_svg_path())
@@ -46,13 +50,26 @@ function! s:is_zero(val) "{{{
   return type(a:val) == type(0) && a:val == 0
 endfunction "}}}
 
+function! plantuml_previewer#copy_viewer_directory() "{{{
+  let viewer_path = s:viewer_path()
+  let default_viewer_path = plantuml_previewer#default_viewer_path()
+  if viewer_path != default_viewer_path
+    if s:is_win
+      call system('xcopy ' . default_viewer_path . ' ' . g:plantuml_previewer#viewer_path . ' /O /X /E /H /K')
+    else
+      call system('cp -r ' . default_viewer_path . ' ' . g:plantuml_previewer#viewer_path)
+    endif
+    echom 'copy ' . default_viewer_path . ' -> ' . viewer_path
+  endif
+endfunction "}}}
+
 function! plantuml_previewer#default_viewer_path() "{{{
   return s:base_path . '/viewer'
 endfunction "}}}
 
 function! s:viewer_path() "{{{
   let path = get(g:, 'plantuml_previewer#viewer_path', 0)
-  return s:is_zero(path) ? plantuml_previewer#default_viewer_path() : path
+  return s:is_zero(path) ? plantuml_previewer#default_viewer_path() : fnameescape(path)
 endfunction "}}}
 
 function! s:viewer_tmp_puml_path() "{{{
@@ -104,7 +121,6 @@ endfunction "}}}
 
 function! plantuml_previewer#refresh() "{{{
   let content = getline(1, '$')
-  echo s:viewer_tmp_puml_path()
   call writefile(content, s:viewer_tmp_puml_path())
   let cmd = [
         \ s:update_viewer_script_path,
