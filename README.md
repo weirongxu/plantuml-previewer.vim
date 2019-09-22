@@ -61,8 +61,9 @@ au FileType plantuml let g:plantuml_previewer#plantuml_jar_path = get(
 Default: 'png'
 
 #### `g:plantuml_previewer#viewer_path`
-Custom plantuml viewer path.  
-`tmp.puml` and `tmp.svg` will output to here  
+Custom plantuml viewer path  
+The plugin will copy viewer to here if the directory does not exist  
+And `tmp.puml` and `tmp.svg` will output to here
 
 
 ## Related
