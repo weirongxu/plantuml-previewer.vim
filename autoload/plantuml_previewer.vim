@@ -9,13 +9,12 @@ let s:default_jar_path = s:base_path . '/lib/plantuml.jar'
 let s:tmp_path = s:base_path . '/tmp'
 
 let s:save_as_script_path = s:base_path . '/script/save-as' . (s:is_win ? '.cmd' : '.sh')
-let s:save_as_tmp_puml_path = s:tmp_path . '/tmp.puml'
 
 let s:update_viewer_script_path = s:base_path . '/script/update-viewer' . (s:is_win ? '.cmd' : '.sh')
 
 function! plantuml_previewer#start() "{{{
   if !executable('java')
-    echoerr 'require java'
+    echoerr 'require java command'
     return
   endif
   let viewer_path = s:viewer_path()
@@ -33,7 +32,7 @@ endfunction "}}}
 
 function! plantuml_previewer#open() "{{{
   if !exists('*OpenBrowser')
-    echoerr 'require openbrowser'
+    echoerr 'require open-browser.vim'
     return
   endif
   call plantuml_previewer#start()
@@ -120,44 +119,60 @@ function! s:run_in_background(cmd) "{{{
 endfunction "}}}
 
 function! plantuml_previewer#refresh() "{{{
-  let content = getline(1, '$')
-  call writefile(content, s:viewer_tmp_puml_path())
+  let puml_src_path = expand('%:p')
+  let puml_filename = expand('%:t:r')
+  let image_type = 'svg'
+  let image_ext = s:fmt_to_ext(image_type)
+  let output_dir_path = s:tmp_path
+  let output_path = output_dir_path . '/' . puml_filename . '.' . image_ext
+  let finial_path = s:viewer_path() . '/tmp.' . image_ext
   let cmd = [
-        \ s:update_viewer_script_path,
-        \ s:jar_path(),
-        \ s:viewer_tmp_puml_path(),
-        \ 'svg',
-        \ localtime(),
-        \ s:viewer_tmp_js_path(),
-        \ ]
+       \ s:update_viewer_script_path,
+       \ s:jar_path(),
+       \ puml_src_path,
+       \ output_dir_path,
+       \ output_path,
+       \ finial_path,
+       \ image_type,
+       \ localtime(),
+       \ s:viewer_tmp_js_path(),
+       \ ]
   call s:run_in_background(cmd)
 endfunction "}}}
 
 function! plantuml_previewer#save_as(...) "{{{
+  if !executable('java')
+    echoerr 'require java command'
+    return
+  endif
+
   let save_path = get(a:000, 0, 0)
-  let target_format = get(a:000, 1, 0)
+  let image_type = get(a:000, 1, 0)
   if s:is_zero(save_path)
     let source_name = expand('%:t:r')
     let save_path = printf("%s.%s", source_name, s:fmt_to_ext(s:save_format()))
   else
     let save_path = fnamemodify(save_path, ':p')
   endif
-  if s:is_zero(target_format)
+  if s:is_zero(image_type)
     let ext = fnamemodify(save_path, ':e')
-    let target_format = ext == '' ? s:save_format() : s:ext_to_fmt(ext)
+    let image_type = ext == '' ? s:save_format() : s:ext_to_fmt(ext)
   endif
-  let target_path = printf("%s.%s", fnamemodify(s:save_as_tmp_puml_path, ':p:r'), target_format)
-  let content = getline(1,'$')
-  call mkdir(s:tmp_path, 'p')
-  call writefile(content, s:save_as_tmp_puml_path)
+
+  let puml_src_path = expand('%:p')
+  let puml_filename = expand('%:t:r')
+  let image_ext = s:fmt_to_ext(image_type)
+  let output_dir_path = s:tmp_path
+  let output_path = output_dir_path . '/' . puml_filename . '.' . image_ext
   call mkdir(fnamemodify(save_path, ':p:h'), 'p')
   let cmd = [
         \ s:save_as_script_path,
         \ s:jar_path(),
-        \ s:save_as_tmp_puml_path,
-        \ target_format,
-        \ target_path,
+        \ puml_src_path,
+        \ output_dir_path,
+        \ output_path,
         \ save_path,
+        \ image_type,
         \ ]
   call s:run_in_background(cmd)
 endfunction "}}}

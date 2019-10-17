@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 jar_path=$1
-puml_path=$2
-image_type=$3
 
-target_path=$4
+puml_src_path=$2
+output_dir_path=$3
+output_path=$4
 save_path=$5
+image_type=$6
 
-java -Dapple.awt.UIElement=true -jar "$jar_path" "$puml_path" -t$image_type
-cp "$target_path" "$save_path"
+java -Dapple.awt.UIElement=true -jar "$jar_path" "$puml_src_path" -t$image_type -o "$output_dir_path"
+cp "$output_path" "$save_path"
