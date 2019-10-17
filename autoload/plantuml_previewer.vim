@@ -12,6 +12,8 @@ let s:save_as_script_path = s:base_path . '/script/save-as' . (s:is_win ? '.cmd'
 
 let s:update_viewer_script_path = s:base_path . '/script/update-viewer' . (s:is_win ? '.cmd' : '.sh')
 
+let s:watched_bufnr = 0
+
 function! plantuml_previewer#start() "{{{
   if !executable('java')
     echoerr 'require java command'
@@ -23,10 +25,11 @@ function! plantuml_previewer#start() "{{{
   endif
   call delete(s:viewer_tmp_puml_path())
   call delete(s:viewer_tmp_svg_path())
-  call plantuml_previewer#refresh()
+  let s:watched_bufnr = bufnr()
+  call plantuml_previewer#refresh(s:watched_bufnr)
   augroup plantuml_previewer
     autocmd!
-    autocmd BufWritePost <buffer> call plantuml_previewer#refresh()
+    autocmd BufWritePost *.puml,*.plantuml call plantuml_previewer#refresh(s:watched_bufnr)
   augroup END
 endfunction "}}}
 
@@ -118,9 +121,9 @@ function! s:run_in_background(cmd) "{{{
   endif
 endfunction "}}}
 
-function! plantuml_previewer#refresh() "{{{
-  let puml_src_path = expand('%:p')
-  let puml_filename = expand('%:t:r')
+function! plantuml_previewer#refresh(bufnr) "{{{
+  let puml_src_path = fnamemodify(bufname(a:bufnr), ':p')
+  let puml_filename = fnamemodify(puml_src_path, ':t:r')
   let image_type = 'svg'
   let image_ext = s:fmt_to_ext(image_type)
   let output_dir_path = s:tmp_path
@@ -160,7 +163,7 @@ function! plantuml_previewer#save_as(...) "{{{
   endif
 
   let puml_src_path = expand('%:p')
-  let puml_filename = expand('%:t:r')
+  let puml_filename = fnamemodify(puml_src_path, ':t:r')
   let image_ext = s:fmt_to_ext(image_type)
   let output_dir_path = s:tmp_path
   let output_path = output_dir_path . '/' . puml_filename . '.' . image_ext
