@@ -25,7 +25,7 @@ function! plantuml_previewer#start() "{{{
   endif
   call delete(s:viewer_tmp_puml_path())
   call delete(s:viewer_tmp_svg_path())
-  let s:watched_bufnr = bufnr()
+  let s:watched_bufnr = bufnr('%')
   call plantuml_previewer#refresh(s:watched_bufnr)
   augroup plantuml_previewer
     autocmd!
