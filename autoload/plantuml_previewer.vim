@@ -29,7 +29,7 @@ function! plantuml_previewer#start() "{{{
   call plantuml_previewer#refresh(s:watched_bufnr)
   augroup plantuml_previewer
     autocmd!
-    autocmd BufWritePost *.puml,*.plantuml call plantuml_previewer#refresh(s:watched_bufnr)
+    autocmd BufWritePost *.pu,*.uml,*.plantuml,*.puml,*.iuml call plantuml_previewer#refresh(s:watched_bufnr)
   augroup END
 endfunction "}}}
 

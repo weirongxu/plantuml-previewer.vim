@@ -1,6 +1,6 @@
 *plantuml-previewer.txt*		plugin for preview PlantUML
 
-Version: 1.5.0
+Version: 1.5.1
 Author:  Weirong Xu <weirongxu.raidou@gmail.com>
 License: MIT License
 
