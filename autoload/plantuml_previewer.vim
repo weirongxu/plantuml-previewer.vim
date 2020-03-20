@@ -121,6 +121,10 @@ function! s:run_in_background(cmd) "{{{
   endif
 endfunction "}}}
 
+function! s:normalize_path(path) "{{{
+  return simplify(expand(a:path))
+endfunction "}}}
+
 function! plantuml_previewer#refresh(bufnr) "{{{
   let puml_src_path = fnamemodify(bufname(a:bufnr), ':p')
   let puml_filename = fnamemodify(puml_src_path, ':t:r')
@@ -133,12 +137,12 @@ function! plantuml_previewer#refresh(bufnr) "{{{
        \ s:update_viewer_script_path,
        \ s:jar_path(),
        \ puml_src_path,
-       \ output_dir_path,
-       \ output_path,
-       \ finial_path,
+       \ s:normalize_path(output_dir_path),
+       \ s:normalize_path(output_path),
+       \ s:normalize_path(finial_path),
        \ image_type,
        \ localtime(),
-       \ s:viewer_tmp_js_path(),
+       \ s:normalize_path(s:viewer_tmp_js_path()),
        \ ]
   call s:run_in_background(cmd)
 endfunction "}}}
@@ -172,9 +176,9 @@ function! plantuml_previewer#save_as(...) "{{{
         \ s:save_as_script_path,
         \ s:jar_path(),
         \ puml_src_path,
-        \ output_dir_path,
-        \ output_path,
-        \ save_path,
+        \ s:normalize_path(output_dir_path),
+        \ s:normalize_path(output_path),
+        \ s:normalize_path(save_path),
         \ image_type,
         \ ]
   call s:run_in_background(cmd)
