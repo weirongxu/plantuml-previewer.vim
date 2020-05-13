@@ -122,7 +122,7 @@ function! s:run_in_background(cmd) "{{{
 endfunction "}}}
 
 function! s:normalize_path(path) "{{{
-  return simplify(expand(a:path))
+  return simplify(expand(a:path, 1))
 endfunction "}}}
 
 function! plantuml_previewer#refresh(bufnr) "{{{
