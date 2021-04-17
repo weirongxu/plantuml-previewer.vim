@@ -40,7 +40,7 @@ function! plantuml_previewer#open() "{{{
   endif
   call plantuml_previewer#start()
   call OpenBrowser(s:viewer_html_path())
-endfunction }}}
+endfunction "}}}
 
 function! plantuml_previewer#stop() "{{{
   augroup plantuml_previewer
