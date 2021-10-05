@@ -14,10 +14,12 @@ let s:update_viewer_script_path = s:base_path . '/script/update-viewer' . (s:is_
 
 let s:watched_bufnr = 0
 
+let s:started = v:false
+
 function! plantuml_previewer#start() "{{{
   if !executable('java')
     echoerr 'require java command'
-    return
+    return v:false
   endif
   let viewer_path = s:viewer_path()
   if !isdirectory(viewer_path) && !filereadable(viewer_path)
@@ -31,22 +33,41 @@ function! plantuml_previewer#start() "{{{
     autocmd!
     autocmd BufWritePost *.pu,*.uml,*.plantuml,*.puml,*.iuml call plantuml_previewer#refresh(s:watched_bufnr)
   augroup END
+  return v:true
 endfunction "}}}
 
 function! plantuml_previewer#open() "{{{
   if !exists('*OpenBrowser')
     echoerr 'require open-browser.vim'
-    return
+    return v:false
   endif
-  call plantuml_previewer#start()
+  let start_result = plantuml_previewer#start()
+  if !start_result
+    return v:false
+  endif
   call OpenBrowser(s:viewer_html_path())
+  let s:started = v:true
+  return v:true
 endfunction "}}}
 
 function! plantuml_previewer#stop() "{{{
   augroup plantuml_previewer
     autocmd!
   augroup END
+  let s:started = v:false
 endfunction "}}}
+
+function! plantuml_previewer#toggle() abort
+  if s:started
+    call plantuml_previewer#stop()
+    echo 'plantuml-previewer stopped'
+  else
+    let open_result = plantuml_previewer#open()
+    if open_result
+      echo 'plantuml-previewer opened'
+    endif
+  endif
+endfunction
 
 function! s:is_zero(val) "{{{
   return type(a:val) == type(0) && a:val == 0

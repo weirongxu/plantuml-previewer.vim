@@ -59,7 +59,11 @@ COMMANDS					*plantuml-previewer-interface-commands*
 
 						*:PlantumlStop*
 :PlantumlStop
-	Stop watch buffer
+	Stop watch buffers
+
+						*:PlantumlToggle*
+:PlantumlToggle
+	|PlantumlOpen| or |PlantumlStop|
 
 						*:PlantumlSave*
 :PlantumlSave [{filepath}] [{format}]
