@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "file-loader": "^1.1.11",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "poi": "^10.1.9",
     "sass-loader": "^7.0.1"
   },
