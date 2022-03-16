@@ -111,6 +111,10 @@ function! s:viewer_html_path() "{{{
   return s:viewer_path() . '/index.html'
 endfunction "}}}
 
+function! s:is_debug_mode() "{{{
+  return get(g:, 'plantuml_previewer#debug_mode', 0)
+endfunction "}}}
+
 function! s:jar_path() "{{{
   let path = get(g:, 'plantuml_previewer#plantuml_jar_path', 0)
   return s:is_zero(path) ? s:default_jar_path : path
@@ -128,17 +132,39 @@ function! s:fmt_to_ext(fmt) "{{{
   return a:fmt == 'latex' ? 'tex' : a:fmt
 endfunction "}}}
 
+function! s:print_stdout(lines) "{{{
+  let msg = trim(join(a:lines))
+  if !empty(msg)
+    echomsg msg
+  endif
+endfunction "}}}
+
+function! s:print_stderr(lines) "{{{
+  let msg = trim(join(a:lines))
+  if !empty(msg)
+    echoerr msg
+  endif
+endfunction "}}}
+
 function! s:run_in_background(cmd) "{{{
-  if s:Job.is_available()
-    call s:Job.start(a:cmd)
+  if s:is_debug_mode()
+    if s:Job.is_available()
+      call s:Job.start(a:cmd, {'on_stdout': function('s:print_stdout'), 'on_stderr': function('s:print_stderr')})
+    else
+      call s:print_stdout(s:Process.execute(a:cmd))
+    endif
   else
-    try
-      call s:Process.execute(a:cmd, {
-            \ 'background': 1,
-            \})
-    catch
-      call s:Process.execute(a:cmd)
-    endtry
+    if s:Job.is_available()
+      call s:Job.start(a:cmd)
+    else
+      try
+        call s:Process.execute(a:cmd, {
+              \ 'background': 1,
+              \})
+      catch
+        call s:Process.execute(a:cmd)
+      endtry
+    endif
   endif
 endfunction "}}}
 
