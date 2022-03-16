@@ -78,10 +78,11 @@ Custom plantuml viewer path
 The plugin will copy viewer to here if the directory does not exist  
 And `tmp.puml` and `tmp.svg` will output to here
 
-#### `g:plantuml_previewer#debug`
+#### `g:plantuml_previewer#debug_mode`
 
 Debug mode  
-The plugin will print debug message if this is set to `1`
+The plugin will print debug message if this is set to `1`  
+Default: 0
 
 ## Related
 
