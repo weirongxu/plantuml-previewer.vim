@@ -6,6 +6,8 @@ let s:base_path = fnameescape(expand("<sfile>:p:h")) . '/..'
 
 let s:default_jar_path = s:base_path . '/lib/plantuml.jar'
 
+let s:default_include_path = ''
+
 let s:tmp_path = s:base_path . '/tmp'
 
 let s:save_as_script_path = s:base_path . '/script/save-as' . (s:is_win ? '.cmd' : '.sh')
@@ -120,6 +122,11 @@ function! s:jar_path() "{{{
   return s:is_zero(path) ? s:default_jar_path : path
 endfunction "}}}
 
+function! s:include_path() "{{{
+  let path = get(g:, 'plantuml_previewer#include_path', 0)
+  return s:is_zero(path) ? s:default_include_path : path
+endfunction "}}}
+
 function! s:save_format() "{{{
   return get(g:, 'plantuml_previewer#save_format', 'png')
 endfunction "}}}
@@ -190,6 +197,7 @@ function! plantuml_previewer#refresh(bufnr) "{{{
        \ image_type,
        \ localtime(),
        \ s:normalize_path(s:viewer_tmp_js_path()),
+       \ s:include_path(),
        \ ]
   call s:run_in_background(cmd)
 endfunction "}}}
@@ -227,6 +235,7 @@ function! plantuml_previewer#save_as(...) "{{{
         \ s:normalize_path(output_path),
         \ s:normalize_path(save_path),
         \ image_type,
+        \ s:include_path(),
         \ ]
   call s:run_in_background(cmd)
 endfunction "}}}

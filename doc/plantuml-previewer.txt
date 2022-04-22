@@ -104,7 +104,13 @@ g:plantuml_previewer#viewer_path
 	And `tmp.puml` and `tmp.svg` will output to here
 	Default: "~/.plantuml-previewer"
 
-				*g:plantuml_previewer#debug_mode*
+                                *g:plantuml_previewer#include_path*
+g:plantuml_previewer#include_path
+        Extend the include path that plantuml uses to find files included
+        via "!include".
+        Default: ""
+
+                                *g:plantuml_previewer#debug_mode*
 g:plantuml_previewer#debug_mode
 	Debug mode
 	Default: 0

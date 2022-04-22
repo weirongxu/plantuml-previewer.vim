@@ -8,7 +8,8 @@ set image_type=%6
 
 set timestamp=%7
 set update_js_path=%8
+set include_path=%9
 
-java -Dapple.awt.UIElement=true -jar "%jar_path%" "%puml_src_path%" -t%image_type% -o "%output_dir_path%"
+java -Dapple.awt.UIElement=true -Dplantuml.include.path="%include_path%" -jar "%jar_path%" "%puml_src_path%" -t%image_type% -o "%output_dir_path%"
 echo F | xcopy /S /Q /F /Y  "%output_path%" "%finial_path%"
 echo window.updateDiagramURL('%timestamp%') > "%update_js_path%"
