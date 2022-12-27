@@ -8,4 +8,5 @@ save_path=$5
 image_type=$6
 include_path=$7
 
-java -Dapple.awt.UIElement=true -Djava.awt.headless=true -Dplantuml.include.path="$include_path" -jar "$jar_path" "$puml_src_path" -t$image_type -o "$save_path"
+java -Dapple.awt.UIElement=true -Djava.awt.headless=true -Dplantuml.include.path="$include_path" -jar "$jar_path" "$puml_src_path" -t$image_type -o "$output_dir_path"
+cp "$output_path" "$save_path"
