@@ -8,7 +8,7 @@ let s:default_jar_path = s:base_path . '/lib/plantuml.jar'
 
 let s:default_include_path = ''
 
-let s:tmp_path = s:base_path . '/tmp'
+let s:tmp_path = (s:is_win ? base_path . '/tmp' : '/tmp/plantuml-previewer')
 
 let s:save_as_script_path = s:base_path . '/script/save-as' . (s:is_win ? '.cmd' : '.sh')
 
