@@ -83,6 +83,7 @@ function! plantuml_previewer#copy_viewer_directory() "{{{
       call system('xcopy ' . default_viewer_path . ' ' . g:plantuml_previewer#viewer_path . ' /O /X /E /H /K')
     else
       call system('cp -r ' . default_viewer_path . ' ' . g:plantuml_previewer#viewer_path)
+      call system('chmod +w ' . g:plantuml_previewer#viewer_path)
     endif
     echom 'copy ' . default_viewer_path . ' -> ' . viewer_path
   endif
