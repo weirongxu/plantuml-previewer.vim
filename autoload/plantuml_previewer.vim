@@ -6,6 +6,8 @@ let s:base_path = fnameescape(expand("<sfile>:p:h")) . '/..'
 
 let s:default_jar_path = s:base_path . '/lib/plantuml.jar'
 
+let s:default_java_path = 'java'
+
 let s:default_include_path = ''
 
 let s:tmp_path = (s:is_win ? s:base_path . '/tmp' : '/tmp/plantuml-previewer')
@@ -19,7 +21,7 @@ let s:watched_bufnr = 0
 let s:started = v:false
 
 function! plantuml_previewer#start() "{{{
-  if !executable('java')
+  if !executable(s:java_path())
     echoerr 'require java command'
     return v:false
   endif
@@ -118,6 +120,11 @@ function! s:is_debug_mode() "{{{
   return get(g:, 'plantuml_previewer#debug_mode', 0)
 endfunction "}}}
 
+function! s:java_path() "{{{
+  let path = get(g:, 'plantuml_previewer#java_path', 0)
+  return s:is_zero(path) ? s:default_java_path : path
+endfunction "}}}
+
 function! s:jar_path() "{{{
   let path = get(g:, 'plantuml_previewer#plantuml_jar_path', 0)
   return s:is_zero(path) ? s:default_jar_path : path
@@ -190,6 +197,7 @@ function! plantuml_previewer#refresh(bufnr) "{{{
   let finial_path = s:viewer_path() . '/tmp.' . image_ext
   let cmd = [
        \ s:update_viewer_script_path,
+       \ s:java_path(),
        \ s:jar_path(),
        \ puml_src_path,
        \ s:normalize_path(output_dir_path),
@@ -204,7 +212,7 @@ function! plantuml_previewer#refresh(bufnr) "{{{
 endfunction "}}}
 
 function! plantuml_previewer#save_as(...) "{{{
-  if !executable('java')
+  if !executable(s:java_path())
     echoerr 'require java command'
     return
   endif
@@ -230,6 +238,7 @@ function! plantuml_previewer#save_as(...) "{{{
   call mkdir(fnamemodify(save_path, ':p:h'), 'p')
   let cmd = [
         \ s:save_as_script_path,
+        \ s:java_path(),
         \ s:jar_path(),
         \ puml_src_path,
         \ s:normalize_path(output_dir_path),
