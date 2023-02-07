@@ -87,6 +87,11 @@ COMMANDS					*plantuml-previewer-interface-commands*
 -----------------------------------------------------------------------------
 VARIABLES				*plantuml-previewer-interface-variables*
 
+				*g:plantuml_previewer#java_path
+g:plantuml_previewer#java_path
+	The location of the Java executable.
+	Default: "java"
+
 				*g:plantuml_previewer#plantuml_jar_path*
 g:plantuml_previewer#plantuml_jar_path
 	plantuml.jar path
