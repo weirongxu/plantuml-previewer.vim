@@ -67,6 +67,18 @@ au FileType plantuml let g:plantuml_previewer#plantuml_jar_path = get(
     \)
 ```
 
+#### `g:plantuml_previewer#file_pattern`
+
+Files that will be watched by plugin.
+
+Default: `*.pu,*.uml,*.plantuml,*.puml,*.iuml`
+
+If you want add another files, place something like this to your `.vimrc`:
+
+```vim
+let g:plantuml_previewer#file_pattern = "*.pu,*.uml,*.plantuml,*.puml,*.iuml,*.md"
+```
+
 #### `g:plantuml_previewer#save_format`
 
 `:PlantumlSave` default format  
