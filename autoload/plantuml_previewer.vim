@@ -20,6 +20,8 @@ let s:watched_bufnr = 0
 
 let s:started = v:false
 
+let s:extensions = get(g:, "plantuml_previewer#file_pattern", "*.pu,*.uml,*.plantuml,*.puml,*.iuml")
+
 function! plantuml_previewer#start() "{{{
   if !executable(s:java_path())
     echoerr 'require java command'
@@ -35,7 +37,7 @@ function! plantuml_previewer#start() "{{{
   call plantuml_previewer#refresh(s:watched_bufnr)
   augroup plantuml_previewer
     autocmd!
-    autocmd BufWritePost *.pu,*.uml,*.plantuml,*.puml,*.iuml call plantuml_previewer#refresh(s:watched_bufnr)
+    execute 'autocmd BufWritePost ' . s:extensions . ' call plantuml_previewer#refresh(s:watched_bufnr)'
   augroup END
   return v:true
 endfunction "}}}
